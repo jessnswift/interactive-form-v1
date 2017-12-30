@@ -68,3 +68,36 @@ $('#design').on('change', function(event) {
 
     }
   })
+
+  // Disable the workshop in the competing time slots that aren't available.
+
+  let conflictingLookUp = {
+    'js-frameworks':['express'],
+    'express':['js-frameworks'],
+    'js-libs':['node'],
+    'node':['js-libs']
+  }
+
+ let checkBoxes = $('.activities input');
+ $.each(checkBoxes, function(index, currentCheckBox){
+   let $currentCheckBox = $(currentCheckBox);
+
+   $currentCheckBox.click(function(event){
+     if(event.target.checked) {
+       var conflictingActivity = conflictingLookUp[event.target.name];
+       var $conflictingCheckBox = $(`.activities input[name=${conflictingActivity}]`);
+       let label = $conflictingCheckBox.parent()[0];
+       $conflictingCheckBox.prop('disabled', true);
+       $(label).css('color', 'gray');
+     //When a user unchecks an activity, competing activities (if there are any) are no longer disabled.
+     } else {
+       var conflictingActivity = conflictingLookUp[event.target.name];
+       var $conflictingCheckBox = $(`.activities input[name=${conflictingActivity}]`);
+        $conflictingCheckBox.prop('disabled', false);
+        let label = $conflictingCheckBox.parent()[0];
+        $(label).css('color', 'black');
+    }
+   })
+ })
+
+ //As a user selects activities, a running total should display below the list of checkboxes.
