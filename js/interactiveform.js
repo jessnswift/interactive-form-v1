@@ -1,13 +1,18 @@
+$('h3').hide();
+$('#bitcoin').hide();
+$('#paypal').hide();
+
 const $otherTitle = $('#other-title');
+let totalFee = 0;
 function hidePlaceHolder() {
   $otherTitle.hide();
 }
 
-// give focus to the first text field & hide other job role
+//give focus to the first text field & hide other job role
 $('#name').focus();
 hidePlaceHolder();
 
-// a text field that will appear when "other" in drop down list is selected
+//a text field that will appear when "other" in drop down list is selected
 $('#title').on('change', function(event) {
   if(event.target.value==='other') {
     $otherTitle.show();
@@ -16,7 +21,7 @@ $('#title').on('change', function(event) {
   }
 })
 
-// "Theme - JS Puns" display "Cornflower Blue," "Dark Slate Grey," and "Gold"
+//"Theme - JS Puns" display "Cornflower Blue," "Dark Slate Grey," and "Gold"
 let designColors = {
   'js puns': [
     {
@@ -32,7 +37,7 @@ let designColors = {
       'friendlyName': 'Gold'
     }
   ],
-  // "Theme - Heart JS" display "Steel Blue," "Dim Grey," and "Tomato"
+  //"Theme - Heart JS" display "Steel Blue," "Dim Grey," and "Tomato"
   'heart js': [
     {
       'value': 'tomato',
@@ -49,7 +54,7 @@ let designColors = {
   ],
 };
 
-// if selected show specific colors
+//if selected show specific colors
 $('#design').on('change', function(event) {
   if(event.target.value==='js puns') {
     let optionsHtml = ``;
@@ -69,7 +74,7 @@ $('#design').on('change', function(event) {
     }
   })
 
-  // Disable the workshop in the competing time slots that aren't available.
+  //Disable the workshop in the competing time slots that aren't available.
 
   let conflictingLookUp = {
     'js-frameworks':['express'],
@@ -79,14 +84,35 @@ $('#design').on('change', function(event) {
   }
 
  let checkBoxes = $('.activities input');
+ function updateTotalVisibility(){
+ //As a user selects activities, a running total should display below the list of checkboxes.
+ let showTotal = false;
+   $.each(checkBoxes, function(index, item){
+     if (item.checked) {
+       showTotal = true;
+     }
+   })
+   if (showTotal) {
+     $('h3').show();
+   } else {
+     $('h3').hide();
+   }
+ }
  $.each(checkBoxes, function(index, currentCheckBox){
    let $currentCheckBox = $(currentCheckBox);
 
    $currentCheckBox.click(function(event){
+     let feeAmount = 100;
+     if(event.target.name === 'all') {
+       feeAmount = 200;
+     }
+
      if(event.target.checked) {
        var conflictingActivity = conflictingLookUp[event.target.name];
        var $conflictingCheckBox = $(`.activities input[name=${conflictingActivity}]`);
        let label = $conflictingCheckBox.parent()[0];
+       totalFee += feeAmount;
+       $('h3').text(`Total = $${totalFee}`);
        $conflictingCheckBox.prop('disabled', true);
        $(label).css('color', 'gray');
      //When a user unchecks an activity, competing activities (if there are any) are no longer disabled.
@@ -95,9 +121,72 @@ $('#design').on('change', function(event) {
        var $conflictingCheckBox = $(`.activities input[name=${conflictingActivity}]`);
         $conflictingCheckBox.prop('disabled', false);
         let label = $conflictingCheckBox.parent()[0];
+        totalFee -= feeAmount;
+        $('h3').text(`Total = $${totalFee}`);
         $(label).css('color', 'black');
-    }
-   })
+      }
+      updateTotalVisibility();
+    })
  })
 
- //As a user selects activities, a running total should display below the list of checkboxes.
+//Display payment sections based on the payment option chosen in the select menu
+$('#payment').change(function(event){
+
+   $('#bitcoin').hide();
+   $('#credit').hide();
+   $('#paypal').hide();
+
+  let selectedOption = event.target.value;
+  $(`#${selectedOption.split(' ')[0]}`).show();
+});
+
+function onsubmit(event){
+  let isValid = true;
+  event.preventDefault();
+  // validate name field to be required
+  let nameInput = $('#name')
+  if (nameInput.val() === "") {
+    isValid = false;
+    $('#name-error').html('Please provide your name')
+  }
+
+  // valdiate email to be required and formmated correctly
+  let mailInput = $('#mail')
+  if (mailInput.val() === "") {
+    isValid = false;
+    $('#mail-error').html('Please provide a valid email')
+  }
+
+  // validate at least one activity is checked
+  let anyCheckBoxChecked = $.inArray(checkBoxes, (currentCheckBox) => { return currentCheckBox.checked})
+  if (anyCheckBoxChecked > -1) {
+    isValid = false;
+    $('#checkbox-error').html('Please check at least one activity')
+  }
+  // If the selected payment option is "Credit Card," make sure the user has supplied a
+  //  credit card number, a zip code, and a CVV value before the form can be submitted.
+  if ($('#payment')[0].selectedOptions[0].value === 'credit card'){
+    if ($('#cc-num').val() === ""){
+      isValid = false
+      $('#cc-num').addClass('errorborder');
+    }
+    if ($('#zip').val() === ""){
+      isValid = false;
+      $('#zip').addClass('errorborder');
+    }
+    if ($('#cvv').val() === ""){
+      isValid = false;
+      $('#cvv').addClass('errorborder');
+    }
+  }
+
+  if (isValid) {
+    $("form[name='registration']")[0].submit();
+  } else {
+    return false;
+  }
+}
+
+
+let registrationForm = $("form[name='registration']");
+$(registrationForm).submit(onsubmit);

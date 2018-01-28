@@ -96,6 +96,15 @@ input:focus {
 	transition: border-color .4s, background-color .4s;
 }
 
+.error {
+  color: darkred;
+  margin-bottom: 8px;
+}
+
+.errorborder {
+  border: 2px solid darkred;
+}
+
 input[type="checkbox"],
 input[type="radio"] {
 	display: inline-block;
@@ -111,6 +120,14 @@ button {
 
 button:hover {
 	background: #184c62;
+}
+
+input:invalid {
+  box-shadow: 0 0 5px 1px red;
+}
+
+input:valid {
+  outline: none;
 }
 
 /* =================================
