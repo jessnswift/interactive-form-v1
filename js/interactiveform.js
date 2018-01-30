@@ -70,7 +70,6 @@ $('#design').on('change', function(event) {
       optionsHtml += `<option value="${punsOptions[i].value}">${punsOptions[i].friendlyName}</option>`
     }
     $('#color').html(optionsHtml);
-
     }
   })
 
@@ -107,24 +106,23 @@ $('#design').on('change', function(event) {
        feeAmount = 200;
      }
 
+     var conflictingActivity = conflictingLookUp[event.target.name];
+     var $conflictingCheckBox = $(`.activities input[name=${conflictingActivity}]`);
+     let label = $conflictingCheckBox.parent()[0];
+
      if(event.target.checked) {
-       var conflictingActivity = conflictingLookUp[event.target.name];
-       var $conflictingCheckBox = $(`.activities input[name=${conflictingActivity}]`);
-       let label = $conflictingCheckBox.parent()[0];
        totalFee += feeAmount;
-       $('h3').text(`Total = $${totalFee}`);
        $conflictingCheckBox.prop('disabled', true);
        $(label).css('color', 'gray');
-     //When a user unchecks an activity, competing activities (if there are any) are no longer disabled.
      } else {
-       var conflictingActivity = conflictingLookUp[event.target.name];
-       var $conflictingCheckBox = $(`.activities input[name=${conflictingActivity}]`);
-        $conflictingCheckBox.prop('disabled', false);
-        let label = $conflictingCheckBox.parent()[0];
+       // When a user unchecks an activity, competing activities
+       // (if there are any) are no longer disabled.
         totalFee -= feeAmount;
-        $('h3').text(`Total = $${totalFee}`);
+        $conflictingCheckBox.prop('disabled', false);
         $(label).css('color', 'black');
       }
+
+      $('h3').text(`Total = $${totalFee}`);
       updateTotalVisibility();
     })
  })
@@ -158,8 +156,13 @@ function onsubmit(event){
   }
 
   // validate at least one activity is checked
-  let anyCheckBoxChecked = $.inArray(checkBoxes, (currentCheckBox) => { return currentCheckBox.checked})
-  if (anyCheckBoxChecked > -1) {
+
+  // let noCheckBoxesChecked = $.inArray($('.activities input'), (currentCheckBox) => {return currentCheckBox.checked}) === -1;
+  let checkBoxesChecked = $('.activities input').filter((index, currentCheckBox) => {
+    return currentCheckBox.checked
+  })
+  let noCheckBoxesChecked = checkBoxesChecked.length === 0;
+  if (noCheckBoxesChecked) {
     isValid = false;
     $('#checkbox-error').html('Please check at least one activity')
   }
@@ -186,7 +189,6 @@ function onsubmit(event){
     return false;
   }
 }
-
 
 let registrationForm = $("form[name='registration']");
 $(registrationForm).submit(onsubmit);
