@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Register for Full Stack Conf</title>
+	<title>Full Stack Conference Registation</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
@@ -11,14 +11,14 @@
 	<div class="container">
 
     <header>
-      <span>Register for</span>
-      <h1>Full Stack Conf</h1>
+      <span>Full Stack Conference</span>
+      <h1>Registration</h1>
     </header>
 
     <form name="registration" action="index.html" method="post">
 
       <fieldset>
-        <legend>Basic Info</legend>
+        <legend>Personal Info</legend>
 
         <div id="name-error" class="error"></div>
         <label for="name">Name:</label>
@@ -44,8 +44,17 @@
         <legend>T-Shirt Info</legend>
 
         <div>
+          <label for="swag">Want some Swag?</label>
+          <select id="swag" name="user_swag" required>
+            <option value="true">Yes</option>
+            <option value="false" selected>No</option>
+          </select>
+        </div>
+
+        <div class="tshirt-options" id="tshirt-options">
+        <div class="tshirt">
           <label for="size">Size:</label>
-          <select id="size" name="user_size">
+          <select id="size" name="user_size" required>
             <option value="small">S</option>
             <option value="medium" selected>M</option>
             <option value="large">L</option>
@@ -53,7 +62,7 @@
           </select>
         </div>
 
-        <div>
+        <div class="tshirt">
           <label for="design">Design:</label>
           <select id="design" name="user_design" required>
             <option>Select Theme</option>
@@ -62,7 +71,7 @@
           </select>
         </div>
 
-        <div id="colors-js-puns" class="">
+        <div id="colors-js-puns" class="tshirt">
           <label for="color">Color:</label>
           <select id="color">
             <option value="cornflowerblue">Cornflower Blue</option>
@@ -73,6 +82,7 @@
             <option value="dimgrey">Dim Grey</option>
           </select>
         </div>
+      </div>
       </fieldset>
 
       <fieldset class="activities">
@@ -81,7 +91,7 @@
         <label><input type="checkbox" name="all"> Main Conference — $200</label>
         <label><input type="checkbox" name="js-frameworks"> JavaScript Frameworks Workshop — Tuesday 9am-12pm, $100</label>
         <label><input type="checkbox" name="js-libs"> JavaScript Libraries Workshop — Tuesday 1pm-4pm, $100</label>
-        <label><input type="checkbox" name="express"> Express Workshop — Tuesday 9am-12pm, $100</label>
+        <label><input type="checkbox" name="git"> Git Workshop — Tuesday 9am-12pm, $100</label>
         <label><input type="checkbox" name="node"> Node.js Workshop — Tuesday 1pm-4pm, $100</label>
         <label><input type="checkbox" name="build-tools"> Build tools Workshop — Wednesday 9am-12pm, $100</label>
         <label><input type="checkbox" name="npm"> npm Workshop — Wednesday 1pm-4pm, $100</label>
@@ -105,15 +115,15 @@
         	  <input id="cc-num" name="user_cc-num" type="text" min="13" max="16">
           </div>
 
-          
+
           <div class="col-3 col">
             <label for="zip">Zip Code:</label>
-            <input id="zip" name="user_zip" type="text" min="5" max="5">
+            <input id="zip" name="user_zip" type="text" minlength="5" maxlength="5" />
           </div>
 
           <div class="col-3 col">
             <label for="cvv">CVV:</label>
-            <input id="cvv" name="user_cvv" type="text" min="3" max="3">
+            <input id="cvv" name="user_cvv" type="text" minlength="3" maxlength="3" />
           </div>
 
           <label for="exp-month">Expiration Date:</label>
@@ -133,11 +143,11 @@
           </select>
           <label for="exp-year">Expiration Year:</label>
           <select id="exp-year" name="user_exp-year">
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
             <option value="2019">2019</option>
             <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2021</option>
+            <option value="2023">2023</option>
           </select>
         </div>
 

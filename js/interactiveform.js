@@ -1,6 +1,7 @@
 $('h3').hide();
 $('#bitcoin').hide();
 $('#paypal').hide();
+$('.tshirt').hide();
 
 const $otherTitle = $('#other-title');
 let totalFee = 0;
@@ -14,7 +15,7 @@ hidePlaceHolder();
 
 //a text field that will appear when "other" in drop down list is selected
 $('#title').on('change', function(event) {
-  if(event.target.value==='other') {
+  if(event.target.value ==='other') {
     $otherTitle.show();
   } else {
     hidePlaceHolder();
@@ -76,8 +77,8 @@ $('#design').on('change', function(event) {
   //Disable the workshop in the competing time slots that aren't available.
 
   let conflictingLookUp = {
-    'js-frameworks':['express'],
-    'express':['js-frameworks'],
+    'js-frameworks':['git'],
+    'git':['js-frameworks'],
     'js-libs':['node'],
     'node':['js-libs']
   }
